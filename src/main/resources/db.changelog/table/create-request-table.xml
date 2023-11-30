@@ -44,7 +44,7 @@
             <column name="type_of_request_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="recipient_id" type="int">
+            <column name="recipient_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="delivery_type_id" type="int">
