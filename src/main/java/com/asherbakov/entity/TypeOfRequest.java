@@ -13,6 +13,7 @@ import java.util.Set;
 @Setter
 public class TypeOfRequest {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(length = 60, nullable = false)
     private String name;
@@ -22,7 +23,7 @@ public class TypeOfRequest {
     private String dayType;
     @Column(length = 20, nullable = false)
     private String associated;
-    @OneToMany(mappedBy = "typeOfRequestId")
+    @OneToMany(mappedBy = "typeOfRequest")
     private Set<Request> requestSet = new HashSet<>();
 
 }

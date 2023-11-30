@@ -10,6 +10,7 @@ import java.util.Set;
 @Getter
 public class Role {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(length = 20, nullable = false)
     private String name;

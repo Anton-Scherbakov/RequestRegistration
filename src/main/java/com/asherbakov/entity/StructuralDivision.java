@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 public class StructuralDivision {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(length = 10, nullable = false)
     private String code;
@@ -26,10 +27,10 @@ public class StructuralDivision {
     private String postIndex;
     @ManyToOne
     @JoinColumn(name = "upr_id")
-    private Upr uprId;
-    @OneToMany(mappedBy = "structuralDivisionId")
+    private Upr upr;
+    @OneToMany(mappedBy = "structuralDivision")
     private List<User> userList = new ArrayList<>();
-    @OneToMany(mappedBy = "structuralDivisionId")
+    @OneToMany(mappedBy = "structuralDivision")
     private List<Request> requestList = new ArrayList<>();
     // TODO: Добавить зависимости
 

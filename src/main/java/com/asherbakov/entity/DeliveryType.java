@@ -13,9 +13,10 @@ import java.util.Set;
 @Setter
 public class DeliveryType {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(length = 40, nullable = false)
     private String name;
-    @OneToMany(mappedBy = "deliveryTypeId")
+    @OneToMany(mappedBy = "deliveryType")
     private Set<Request> requestSet = new HashSet<>();
 }

@@ -13,9 +13,10 @@ import java.util.Set;
 @Setter
 public class PurposeOfRequest {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(length = 50, nullable = false)
     private String name;
-    @OneToMany(mappedBy = "purposeOfRequestId")
+    @OneToMany(mappedBy = "purposeOfRequest")
     private Set<Request> requestSet = new HashSet<>();
 }

@@ -12,6 +12,7 @@ import java.util.Set;
 @Setter
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(length = 20, nullable = false)
     private String username;
@@ -29,10 +30,10 @@ public class User {
     private boolean enabled;
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
-    private Location locationId;
+    private Location location;
     @ManyToOne
     @JoinColumn(name = "structural_division_id", nullable = false)
-    private StructuralDivision structuralDivisionId;
+    private StructuralDivision structuralDivision;
     //    @ManyToOne
     //    @JoinColumn(name = "role_id", nullable = false)
     //    private int roleId;
@@ -42,6 +43,6 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roleSet = new HashSet<>();
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "user")
     private Set<Request> requestSet = new HashSet<>();
 }
