@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/images/sfr-logo-alpha.png">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/chosen.min.css">
+    <link rel="stylesheet" href="/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/css/dataTables.min.css">
+    <link rel="stylesheet" href="/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/css/solid.min.css">
+    <link rel="stylesheet" href="/css/brands.min.css">
+    <link rel="stylesheet" href="/css/contextMenu.css">
+    <link rel="stylesheet" href="/css/tableSubLine.css">
+    <link rel="stylesheet" href="/css/dropdownButton.css">
+    <title>Журнал запросов ПСХ</title>
+</head>
+
+<body>
+<div class="container d-flex flex-column min-vh-100">
+    <div th:insert="~{pages/blocks/header :: header}"></div>
+    <div class="row mt-3 mb-3">
+        <div class="col px-0">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createRk"
+                    id="btnCreateWorkCard"><i class="fa-solid fa-folder-plus me-2"></i>Создать РК
+            </button>
+            <!-- Не  работает с DataTables
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-file-lines me-2"></i>
+                  Отчёт
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">По виду ЗПСХ</a></li>
+                  <li><a class="dropdown-item" href="#">По цели ЗПСХ</a></li>
+                  <li><a class="dropdown-item">По способу направления ЗПСХ</a></li>
+                  <li><a class="dropdown-item" href="#">Список ЗПСХ без ответов</a></li>
+                  <hr class="m-1">
+                  <li><a class="dropdown-item" href="#">По специалистам</a></li>
+                  <li><a class="dropdown-item" href="#">Экспорт записей журнала</a></li>
+                </ul>
+            </div>
+    -->
+            <!-- -->
+            <div class="dropdown">
+                <button type="button" class="btn btn-success dropdown-toggle dropdownBtn">
+                    <i class="fa-solid fa-file-lines me-2"></i>
+                    Отчёт
+                </button>
+                <div class="dropdown-content">
+                    <a class="" href="#">По виду ЗПСХ</a>
+                    <a class="" href="#">По цели ЗПСХ</a>
+                    <a class="" href="#">По способу направления ЗПСХ</a>
+                    <a class="" href="#">Список ЗПСХ без ответов</a>
+                    <hr class="m-1">
+                    <a class="" href="#">По специалистам</a>
+                    <a class="" href="#">Экспорт записей журнала</a>
+                </div>
+            </div>
+            <!-- -->
+
+            <!-- <button class="btn btn-success"><i class="fa-solid fa-snowplow me-2"></i>Сбросить фильтры</button> -->
+            <button class="btn btn-success" onclick="$('#find').toggleClass('block-hide');"><i
+                    class="fa-solid fa-magnifying-glass me-2"></i>Поиск
+            </button>
+            <a href="/admin" class="btn btn-success"><i class="fa-solid fa-user-tie me-2"></i>Администрирование</a>
+
+        </div>
+    </div>
+    <!-- <div class="row">
+        <p class="text-center text-uppercase"><strong></strong></p>
+    </div> -->
+
+    <div class="search-filters block-hide" id="find">
+        <div class="row">
+            <div class="col-sm-10">
+                <div class="row mb-1">
+                    <input type="text" placeholder="Дата регистрации" name="registrationDate"
+                           class="form-control ms-3 col" style="width: 180px; max-width: 250px;"
+                           onfocus="(this.type='date')" onblur="(this.type='text')" id="registrationDate" required
+                           tabindex="5">
+                    <input type="text" placeholder="Регистрационный номер" class="form-control ms-3 col"
+                           style="width: 180px; max-width: 250px;">
+                    <input type="text" placeholder="СНИЛС" class="form-control ms-3 col"
+                           style="width: 180px; max-width: 250px;">
+                    <input type="text" placeholder="Контрольный срок" name="controlPeriod"
+                           class="form-control ms-3 col" style="width: 180px; max-width: 250px;"
+                           onfocus="(this.type='date')" onblur="(this.type='text')" id="controlPeriod" required
+                           tabindex="5">
+
+                </div>
+                <div class="row d-flex">
+                    <input type="text" placeholder="Фамилия" class="form-control ms-3 col"
+                           style="width: 180px; max-width: 250px;">
+                    <input type="text" placeholder="Имя" class="form-control ms-3 col"
+                           style="width: 180px; max-width: 250px;">
+                    <input type="text" placeholder="Отчество" class="form-control ms-3 col"
+                           style="width: 180px; max-width: 250px;">
+
+                </div>
+                <p class="ms-1"><input type="checkbox" value="РК текущего специалиста"> РК текущего специалиста</p>
+            </div>
+            <div class="col-sm-2 d-flex flex-column ">
+                <button class="btn btn-success mb-1 "><i
+                        class="fa-solid fa-magnifying-glass me-2"></i>Найти
+                </button>
+                <button class="btn btn-warning "><i
+                        class="fa-solid fa-filter-circle-xmark me-2"></i>Очистить
+                </button>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="row mb-3">
+
+        <table id="dataTable" class="table table-striped dataTable align-middle ps-0 pe-0" style="width:100%;">
+            <thead style=" border: 1px solid black;">
+            <tr>
+                <th>Дата регистрации</th>
+                <th>Регистрационный номер</th>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>СНИЛС</th>
+                <th>Вид запроса</th>
+                <th>Контрольный срок</th>
+                <th>ФИО специалиста</th>
+                <th>Дата поступления ответа</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="el:${Requests}" class="context-menu">
+                <td class="fw-normal" th:text="${el.registrationDate}"></td>
+                <td>
+                    <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#info"
+                            style="padding: 0px;" title="Нажмите на номер, для получения доп. информации"
+                            th:attr="onclick=|showInfo('${el.location.name}', '${el.structuralDivision.name}', '${el.recipient}', '${el.enabled}')|">
+                        <i class="fa-solid fa-circle-info me-2" style="color: gray;"></i><span
+                            th:text="${el.registrationNumber}"></span>
+                    </button>
+                </td>
+                <td th:text="${el.lastName}"></td>
+                <td th:text="${el.firstName}"></td>
+                <td th:text="${el.middleName}"></td>
+                <td th:text="${el.socialNumber}"></td>
+                <td th:text="${el.typeOfRequest.name}"></td>
+                <td th:text="${el.dateWith}"></td>
+                <td th:text="${el.user.lastName} + ' ' + ${el.user.firstName} + ' ' + ${el.user.middleName}"></td>
+                <td th:text="${el.dateAnswer}"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th class="input">Дате регистрации</th>
+                <th class="input">Номеру</th>
+                <th class="input">Фамилии</th>
+                <th class="input">Имени</th>
+                <th class="input">Отчеству</th>
+                <th class="input">СНИЛС</th>
+                <th class="input">Виду запроса</th>
+                <th class="input">Сроку</th>
+                <th class="input">ФИО специалиста</th>
+                <th class="input">Дате ответа</th>
+            </tr>
+            </tfoot>
+        </table>
+
+    </div>
+
+    <div class="context-menu-open">
+        <ul class="menu-line">
+            <li class="pt-2 pb-2 ps-1"><a href="">Открыть дело</a></li>
+            <li class="pt-2 pb-2 ps-1"><a href="">Ответ получен/Удалить признак "ответ получен"</a></li>
+            <li class="pt-2 pb-2 ps-1"><a href="">Создать повторный запрос</a></li>
+            <li class="pt-2 pb-2 ps-1"><a href="">Создать повторный запрос в другую организацию</a></li>
+
+            <li class="">
+                <ul class="">
+                    <li class="parent-menu pt-2 pb-2 ps-1"><a href="">Печать</a>
+                        <ul class="sub-menu">
+                            <li class="pt-2 pb-2 ps-1"><a href="" class="">Запрос</a></li>
+                            <li class="pt-2 pb-2 ps-1"><a href="" class="">Межведомственный запрос</a></li>
+                            <li class="pt-2 pb-2 ps-1"><a href="" class="">Межведомственный запрос (ЗАГС)</a></li>
+                            <li class="pt-2 pb-2 ps-1"><a href="" class="">Стаж работы</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="pt-2 pb-2 ps-1"><a href="">Проставить признак "Удалён"</a></li>
+        </ul>
+    </div>
+
+    <div th:insert="~{pages/blocks/footer :: footer}" class="mt-auto"></div>
+
+    <!-- Модальное окно -->
+    <div class="modal fade" id="info" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalInfoCard">Регистрационная карта</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Тер. орган СФР:</strong> <span id="location"></span><br>
+                    <strong>СП ОСФР:</strong> <span id="structuralDivision"></span><br>
+                    <strong>Адресат:</strong> <span id="recipient"></span><br>
+                    <strong>Запрос в архиве:</strong> <span id="enabled"></span><br>
+                    <strong>Повторный запрос:</strong>
+                    <div class="col">
+                        <div class="row"><a href="#">03-09-08-20160</a></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            id="close-modal">Закрыть
+                    </button>
+                    <button type="button" class="btn btn-primary">Изменить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <form class="modal fade" id="createRk" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createRkModal">Регистрационная карта</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <input id="registrationNumber" style="display: none">
+                    <div class="row mb-1">
+                        <div class="col-4">Дата регистрации запроса:</div>
+                        <div class="col-8"><input type="date" name="dateOfRegistration" id="dateOfRegistration"
+                                                  class="w-100" required></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-4">Фамилия:</div>
+                        <div class="col-8"><input type="text" name="lastName" id="lastName" class="w-100" required>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-4">Имя:</div>
+                        <div class="col-8"><input type="text" name="firstName" id="firstName" class="w-100" required>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-4">Отчество:</div>
+                        <div class="col-8"><input type="text" name="middleName" id="middleName" class="w-100"></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-4">Дата рождения:</div>
+                        <div class="col-8"><input type="date" name="dateOfBirthday" id="dateOfBirthday" class="w-100">
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-4">СНИЛС:</div>
+                        <div class="col-8"><input type="text" name="socialNumber" id="socialNumberField"
+                                                  class="w-100"></div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-4">Вид запроса:</div>
+                        <div class="col-8">
+                            <!-- <select data-placeholder="Уточните вид запроса..." class="chosen-select"> -->
+                            <select class="js-chosen chosen-cln w-100" id="typeOfRequest" name="typeOfRequest"
+                                    data-placeholder="Уточните вид запроса..." required>
+                                <option value=""></option>
+                                <option th:each="el:${TypeOfRequest}" th:value="${el.id}"
+                                        th:text="${el.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-4">Цель запроса:</div>
+                        <div class="col-8">
+                            <select class="js-chosen chosen-cln w-100" id="documentPurpose" name="documentPurpose"
+                                    data-placeholder="Уточните цель запроса..." required>
+                                <option value=""></option>
+                                <option th:each="el:${PurposeOfRequest}" th:value="${el.id}"
+                                        th:text="${el.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-4">Способ отправки запроса:</div>
+                        <div class="col-8">
+                            <select class="js-chosen chosen-cln w-100" id="documentSendingMethod"
+                                    name="documentSendingMethod" data-placeholder="Уточните способ отправки запроса..."
+                                    required>
+                                <option value=""></option>
+                                <option th:each="el:${DeliveryType}" th:value="${el.id}" th:text="${el.name}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-4">Адресат:</div>
+                        <div class="col-8">
+                            <select class="js-chosen chosen-cln w-100" id="documentRecipient"
+                                    name="documentRecipient" data-placeholder="Выберете адресата..." disabled required>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-4">
+                            <input type="checkbox" id="enterRecipient" class="me-1">
+                            <label for="enterRecipient">Ввести адресата в ручную:</label>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-4">Наименование:</div>
+                        <div class="col">
+                            <input type="text" name="anotherDocumentRecipient" id="anotherDocumentRecipient"
+                                   class="w-100" disabled>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-4" id="additionalName"></div>
+                        <div class="col">
+                            <input type="text" name="anotherDocumentRecipientAdditional"
+                                   id="anotherDocumentRecipientAdditional"
+                                   class="w-100" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            id="btnCloseModal">Закрыть
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="saveWorkCard">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="js/jquery-3.7.0.min.js"></script>
+<script src="js/bootstrap/bootstrap.min.js"></script>
+<script src="js/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="js/datatables/dataTables.min.js"></script>
+<script src="js/datatables/dataTables.bootstrap5.min.js"></script>
+<script src="js/chosen.jquery.min.js"></script>
+<script src="js/inputmask/jquery.inputmask.min.js"></script>
+
+<script>
+        // Заполнение информации в модальном окне (расширенная информация по карточке)
+        function showInfo(loc, sd, rec, en) {
+            $("#location").text(loc);
+            $("#structuralDivision").text(sd);
+            $("#recipient").text(rec);
+            if (en === 'true') {
+                $("#enabled").text('нет');
+            } else {
+                $("#enabled").text('да');
+            }
+        }
+
+        // Страница информации
+        $("#about").on("click", function (e) {
+            e.preventDefault();
+            alert("Автор: Щербаков Антон Юрьевич\nEmail: ScherbakovA@28.sfr.gov.ru");
+        });
+
+        // Активация поля выбора адресата
+        $("#typeOfRequest").on('change', function () {
+            var rec = $('#typeOfRequest').val();
+            $("#documentRecipient").prop('disabled', false).trigger("chosen:updated");
+            $.ajax({
+                url: "/recipients",
+                type: "POST",
+                data: {type: rec},
+                success: function (e) {
+                    var $recipient = $("#documentRecipient");
+                    $recipient.empty();
+                    $recipient.append('<option></option>');
+                    for (var i = 0; i < e.length; i++) {
+                        console.log("<option id=\'" + e[i].id + "\' value=\'" + e[i].name + "\'>" + e[i].name + "</option>");
+                        $recipient.append("<option id='" + e[i].id + "' value='" + e[i].name + "'>" + e[i].name + "</option>");
+                    }
+                    $recipient.change().trigger("chosen:updated");
+                },
+                error: function (e) {
+                    console.log(e)
+                }
+            });
+        });
+
+        // Активация поля ввода адресата (ручной ввод)
+        $("#enterRecipient").click(function() {
+            if ($(this).is(':checked')) {
+                $("#documentRecipient").prop('disabled', true).trigger("chosen:updated");
+                $("#anotherDocumentRecipient").prop('disabled', false);
+                switch($("#typeOfRequest").val()) {
+                    case '2':
+                        $("#additionalName").text("Адрес:");
+                        $("#anotherDocumentRecipientAdditional").prop('required', false);
+                        $("#anotherDocumentRecipientAdditional").prop('disabled', false);
+                        break;
+                    case '4':
+                        $("#additionalName").text("Код:");
+                        $("#anotherDocumentRecipientAdditional").prop('required', true);
+                        $("#anotherDocumentRecipientAdditional").prop('disabled', false);
+                        break;
+                }
+            } else {
+                $("#documentRecipient").prop('disabled', false).trigger("chosen:updated");
+                $("#anotherDocumentRecipient").prop('disabled', true);
+                $("#anotherDocumentRecipientAdditional").prop('disabled', true);
+                $("#additionalName").text("");
+            }
+        });
+
+        // Установка текущей даты при создании карточки
+        $("#btnCreateWorkCard").click(function () {
+            var today = new Date().toISOString().split('T')[0];
+            $('#dateOfRegistration').val(today);
+        });
+
+        // Отправка карточки на сервер
+        $("#createRk").submit(function(e) {
+            e.preventDefault();
+
+            var recipient = [];
+            if($("#enterRecipient").is(':checked')) {
+                recipient = ["-1", $("#anotherDocumentRecipient").val()];
+                if (!$("#anotherDocumentRecipientAdditional").is(':disabled')) {
+                    recipient.push($("#anotherDocumentRecipientAdditional").val());
+                }
+            } else {
+                recipient = [$("#documentRecipient").children(":selected").attr('id'), "'" + $("#documentRecipient").val() + "'"];
+            }
+            $("#anotherDocumentRecipient").prop('disabled', !$("#anotherDocumentRecipient").prop('disabled'));
+            var record = {
+                "registrationDate" : $("#dateOfRegistration").val(),
+                "lastName" : $("#lastName").val(),
+                "firstName" : $("#firstName").val(),
+                "middleName" : $("#middleName").val(),
+                "dateOfBirthday" : $("#dateOfBirthday").val(),
+                "socialNumber" : $("#socialNumberField").val(),
+                "typeOfRequest" :  $("#typeOfRequest").val(),
+                "documentPurpose" : $("#documentPurpose").val(),
+                "sendMethod" : $("#documentSendingMethod").val(),
+                "recipient" : recipient
+            }
+            $.ajax({
+                url: '/',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(record),
+                success: function(data) {
+
+                },
+                error: function(e) {
+                    console.log(e)
+                }
+            });
+            console.log(record);
+        });
+
+        // Настройка таблицы
+        $(document).ready(function () {
+            $('.dataTable').DataTable({
+                scrollX: true,
+                orderFixed: [1, 'desk'],
+                "language": {
+                    "lengthMenu": "Показывать по _MENU_ записей",
+                    "info": "Показано _START_ - _END_ из _TOTAL_ записей",
+                    "infoEmpty": "Нет записей",
+                    "emptyTable": "Нет записей",
+                    "search": "Поиск:",
+                    "paginate": {
+                        "first": "Первая",
+                        "last": "Последняя",
+                        "next": "Следующая",
+                        "previous": "Предыдущая"
+                    }
+                },
+
+                // Поиск по таблице
+                initComplete: function () {
+                    this.api()
+                        .columns()
+                        .every(function () {
+                            var that = this;
+
+                            $('input', this.footer()).on('keyup change clear', function () {
+                                if (that.search() !== this.value) {
+                                    that.search(this.value).draw();
+                                }
+                            });
+                        });
+                },
+            });
+        });
+
+        // Добавление в таблицу полей поиска
+        $('#dataTable tfoot .input').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" class="input-search" placeholder="Поиск"  style="box-sizing:border-box;width: 100%"/>');
+        });
+
+        // Добавление контекстного меню
+        let = contextMenu = $('.context-menu-open');
+        $('.context-menu').on('contextmenu', function (e) {
+            e.preventDefault();
+            contextMenu.css({ top: e.clientY + 'px', left: e.clientX + 'px' });
+            contextMenu.show();
+        });
+        $(document).on('click', function () {
+            contextMenu.hide();
+        });
+
+        // Очистка полей модального окна
+        $('#btnCloseModal').click(function () {
+            $('#lastName').val('');
+            $('#firstName').val('');
+            $('#middleName').val('');
+            $('#socialNumberField').val('');
+            $('#dateOfBirthday').val('');
+            $('#dateOfRegistration').val('');
+            $('#typeOfRequest option:first').prop('selected', true).trigger("chosen:updated");
+            $('#documentPurpose option:first').prop('selected', true).trigger("chosen:updated");
+            $('#documentSendingMethod option:first').prop('selected', true).trigger("chosen:updated");
+            $('#documentRecipient option:first').prop('selected', true).trigger("chosen:updated");
+            $("#documentRecipient").prop('disabled', true).trigger("chosen:updated");
+            $('#anotherDocumentRecipient').val('');
+        });
+
+        // Настройка выподающих списков
+        $(document).ready(function () {
+            $('.js-chosen').chosen({
+                width: '100%',
+                placeholder_text_single: 'Выберете значение',
+                no_results_text: 'Совпадений не найдено',
+            });
+        });
+
+        // Маска для ввода СНИЛС
+        $(document).ready(function () {
+            $('#socialNumberField').inputmask("999-999-999 99", { autoUnmask: true });
+        });
+
+
+
+
+
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/images/sfr-logo-alpha.png">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/chosen.min.css">
+    <link rel="stylesheet" href="/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/css/dataTables.min.css">
+    <link rel="stylesheet" href="/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/css/solid.min.css">
+    <link rel="stylesheet" href="/css/brands.min.css">
+    <link rel="stylesheet" href="/css/contextMenu.css">
+    <link rel="stylesheet" href="/css/tableSubLine.css">
+    <link rel="stylesheet" href="/css/dropdownButton.css">
+    <title>Журнал запросов ПСХ</title>
+</head>
+
+<body>
+    <div class="container d-flex flex-column min-vh-100">
+        <div th:insert="~{pages/blocks/header :: header}"></div>
+        <div class="row mt-3 mb-3">
+            <div class="col px-0">
+                <a href="/" class="btn btn-success">
+                    <i class="fa-solid fa-left-long me-2"></i>К журналу запросов
+                </a>
+                <a href="/admin" class="btn btn-success">
+                    <i class="fa-solid fa-user-tie me-2"></i>К панели администратора
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <input type="checkbox" name="userEdit" id="userEdit" />
+                <label for="userEdit">редактировать существующего пользователя</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <select class="js-chosen chosen-cln w-100" id="users"
+                name="users" data-placeholder="Выберете специалиста..." required disabled>
+                <option value=""></option>
+                <option value="">Щербаков Антон Юрьевич</option>
+                <!-- <option th:each="el:${appealPurpose}" th:value="${el.id}"
+                    th:text="${el.name}"></option> -->
+            </select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-9">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Данные пользователя</h5>
+                        <div class="row">
+                            <div class="col-4">
+                                Имя пользователя (login)
+                            </div>
+                            <div class="col">
+                                <input type="text" class="w-100" />
+                            </div>
+                        </div>
+                        <div class="row mt-1" style="display: flex;">
+                            <div class="col-4">
+                                Пароль
+                            </div>
+                            <div class="col">
+                                <input type="text" class="w-100" id="inputPassword"/>
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-4">
+                                Фамилия
+                            </div>
+                            <div class="col">
+                                <input type="text" class="w-100" />
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-4">
+                                Имя
+                            </div>
+                            <div class="col">
+                                <input type="text" class="w-100" />
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-4">
+                                Отчество
+                            </div>
+                            <div class="col">
+                                <input type="text" class="w-100" />
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-4">
+                                Роль
+                            </div>
+                            <div class="col">
+                                <input type="text" class="w-100" />
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-4">
+                                E-Mail
+                            </div>
+                            <div class="col">
+                                <input type="text" class="w-100" />
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-4">
+                                Локация
+                            </div>
+                            <div class="col">
+                                <input type="text" class="w-100" />
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-4">
+                                Структурное подразделение
+                            </div>
+                            <div class="col">
+                                <input type="text" class="w-100" />
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row mt-1">
+                            <div class="col">
+                                <input type="checkbox" id="userLock">
+                                <label for="userLock">Заблокирован</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Меню</h5>
+                                <bytton class="btn btn-outline-success w-100" id="btnSave"><i class="fa-regular fa-floppy-disk me-1"></i>Сохранить</bytton>
+                                <!--<bytton class="btn btn-outline-danger mt-1 w-100" id="btnSave"><i class="fa-regular fa-key me-1"></i>Сменить пароль</bytton>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/jquery-3.7.0.min.js"></script>
+        <script src="js/bootstrap/bootstrap.min.js"></script>
+        <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
+        <script src="js/datatables/dataTables.min.js"></script>
+        <script src="js/datatables/dataTables.bootstrap5.min.js"></script>
+        <script src="js/chosen.jquery.min.js"></script>
+        <script src="js/inputmask/jquery.inputmask.min.js"></script>
+
+        <script>
+            // Активация поля выбора пользователя
+            $("#userEdit").click(function() {
+                $("#users").prop('disabled', !$("#users").prop('disabled'));
+                $("#inputPassword").prop('disabled', !$("#inputPassword").prop('disabled'));
+            });
+                
+        </script>
+</body>
+
+</html>
