@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-structural-division-table.1" author="Anton Scherbakov">
+        <preConditions>
+            <not>
+                <tableExists tableName="structural_division"/>
+            </not>
+        </preConditions>
+        <createTable tableName="structural_division">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="code" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(20)"/>
+            <column name="address" type="varchar(100)"/>
+            <column name="post_index" type="varchar(6)"/>
+            <column name="upr_id" type="int"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="structural_division" baseColumnNames="upr_id"
+                                 constraintName="fk_structural_division_upr" referencedTableName="upr"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

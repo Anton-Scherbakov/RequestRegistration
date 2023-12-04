@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/images/sfr-logo-alpha.png">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/chosen.min.css">
+    <link rel="stylesheet" href="/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/css/dataTables.min.css">
+    <link rel="stylesheet" href="/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/css/solid.min.css">
+    <link rel="stylesheet" href="/css/brands.min.css">
+    <link rel="stylesheet" href="/css/contextMenu.css">
+    <link rel="stylesheet" href="/css/tableSubLine.css">
+    <link rel="stylesheet" href="/css/dropdownButton.css">
+    <title>Журнал запросов ПСХ</title>
+</head>
+
+<body>
+    <style>
+        .disabled {
+            color: gray;
+
+        }
+    </style>
+
+    <div class="container d-flex flex-column min-vh-100">
+        <div th:insert="~{pages/blocks/header :: header}"></div>
+        <div class="row mt-3 mb-3">
+            <div class="col px-0">
+                <a href="/" class="btn btn-success">
+                    <i class="fa-solid fa-left-long me-2"></i>К журналу запросов
+                </a>
+                <a href="/admin" class="btn btn-success">
+                    <i class="fa-solid fa-user-tie me-2"></i>К панели администратора
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Праздничные дни</h5>
+                        <p class="card-subtitle">Добавьте выходные дни, которые выпадают на рабочую неделю (к примеру:
+                            вторник - 8 марта).</p>
+                        <div class="input-group mt-1 mb-2">
+                            <input type="date" class="form-control" aria-describedby="btnAddHolidayDate">
+                            <bytton class="btn btn-outline-success" id="btnAddHolidayDate"><i
+                                    class="fa-regular fa-floppy-disk me-1"></i>Добавить</bytton>
+                            <bytton class="btn btn-outline-danger ms-1" id="btnDeleteHolidayDate"><i
+                                    class="fa-regular fa-trash-can me-1"></i>Удалить</bytton>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <input class="form-check-input me-1" type="checkbox" value="" name="h-day"
+                                        id="checkHolidayDay1">
+                                    <label for="checkHolidayDay1" class="w-75">08.03.2024</label>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Рабочие дни</h5>
+                        <p class="card-subtitle">В данном окне заполняются только те дни, которые являются рабочими, но
+                            выпадают на субботу или воскресенье.</p>
+                        <div class="input-group mt-1 mb-2">
+                            <input type="date" class="form-control" aria-describedby="btnAddWorkDate">
+                            <bytton class="btn btn-outline-success" id="btnAddWorkDate"><i
+                                    class="fa-regular fa-floppy-disk me-1"></i>Добавить</bytton>
+                            <bytton class="btn btn-outline-danger ms-1" id="btnDeleteWorkDate"><i
+                                    class="fa-regular fa-trash-can me-1"></i>Удалить</bytton>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <input class="form-check-input me-1" type="checkbox" value="" name="w-day"
+                                        id="checkWorkDay1">
+                                    <label for="checkWorkDay1" class="w-75">02.11.2024</label>
+                                </li>
+                                <li class="list-group-item">
+                                    <input class="form-check-input me-1" type="checkbox" value="" name="w-day"
+                                        id="checkWorkDay2">
+                                    <label for="checkWorkDay2" class="w-75">02.11.2024</label>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/jquery-3.7.0.min.js"></script>
+        <script src="js/bootstrap/bootstrap.min.js"></script>
+        <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
+        <script src="js/datatables/dataTables.min.js"></script>
+        <script src="js/datatables/dataTables.bootstrap5.min.js"></script>
+        <script src="js/chosen.jquery.min.js"></script>
+        <script src="js/inputmask/jquery.inputmask.min.js"></script>
+
+        <script>
+            // Удаление элементов
+            $("#btnDeleteWorkDate").click(function () {
+                var checkedBoxes = document.querySelectorAll('input[name=w-day]:checked');
+                var data = new Array();
+                checkedBoxes.forEach(function(k, v) {
+                    data.push(v);
+                })
+                $.ajax({
+                    url: '/admin/work-date',
+                    method: 'delete',
+                    data: {cb : checkedBoxes},
+                    success: function() {
+
+                    }
+                })
+            });
+        </script>
+    </div>
+</body>
+
+</html>

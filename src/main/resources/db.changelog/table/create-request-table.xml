@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+			http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-request-table.1" author="Anton Scherbakov">
+        <preConditions>
+            <not>
+                <tableExists tableName="request" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="request">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="registration_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="registration_number" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middle_name" type="varchar(30)"/>
+            <column name="date_of_birthday" type="date"/>
+            <column name="social_number" type="varchar(15)"/>
+            <column name="enabled" type="tinyint(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="structural_division_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="purpose_of_request_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type_of_request_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="recipient_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="delivery_type_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_with" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_answer" type="date"/>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="request" baseColumnNames="location_id"
+                                  constraintName="fk_request_location" referencedTableName="location"
+                                  referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="request" baseColumnNames="structural_division_id"
+                                  constraintName="fk_request_structural_division"
+                                  referencedTableName="structural_division" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="request" baseColumnNames="purpose_of_request_id"
+                                  constraintName="fk_request_purpose_of_request"
+                                  referencedTableName="purpose_of_request" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="request" baseColumnNames="type_of_request_id"
+                                  constraintName="fk_request_type_of_request" referencedTableName="type_of_request"
+                                  referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="request" baseColumnNames="delivery_type_id"
+                                  constraintName="fk_request_delivery_type" referencedTableName="delivery_type"
+                                  referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="request" baseColumnNames="user_id" constraintName="fk_request_user"
+                                  referencedTableName="user" referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

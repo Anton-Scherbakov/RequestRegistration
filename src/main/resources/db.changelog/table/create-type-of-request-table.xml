@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-type-of-request-table.1" author="Anton Scherbakov">
+        <preConditions>
+            <not>
+                <tableExists tableName="type_of_request"/>
+            </not>
+        </preConditions>
+        <createTable tableName="type_of_request">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="period" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="day_type" type="varchar(5)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="associated" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

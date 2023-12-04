@@ -1,0 +1,13 @@
+<header th:fragment="header">
+    <div class="row">
+        <nav class="navbar navbar-expand-lg bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/"><strong>Журнал запросов ПСХ</strong><span style="font-size: 0.5em;"> ver: 0.0.1</span></a>
+                <form th:action="@{/logout}" method="post" class="d-flex" role="search">
+                    <!--/* <div class="me-2">[ [[${#httpServletRequest.remoteUser}]] ]</div> */-->
+                    <button class="btn btn-sm btn-outline-danger" type="submit"><i class="fa-solid fa-right-from-bracket me-2"></i>Выход</button>
+                </form>
+            </div>
+        </nav>
+    </div>
+</header>
